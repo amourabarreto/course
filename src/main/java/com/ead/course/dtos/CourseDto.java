@@ -17,6 +17,7 @@ public class CourseDto {
 
     @NotBlank
     private String description;
+
     private String imageUrl;
 
     @NotNull
