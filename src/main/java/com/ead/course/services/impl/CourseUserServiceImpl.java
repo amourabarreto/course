@@ -21,7 +21,7 @@ public class CourseUserServiceImpl implements CourseUserService {
 
     @Override
     public boolean existsByCourseAndUserId(CourseModel courseModel, UUID userId) {
-        return courseUserRespository.existsByCourseAndUserId(courseModel,userId);
+        return courseUserRespository.existsByCourseAndUserId(courseModel, userId);
     }
 
     @Override
@@ -32,8 +32,8 @@ public class CourseUserServiceImpl implements CourseUserService {
     @Transactional
     @Override
     public CourseUserModel saveAndSendSubscriptionUserInCourse(CourseUserModel courseUserModel) {
-        courseUserModel  = courseUserRespository.save(courseUserModel);
-        authUserClient.postSubscriptionUserInCourse(courseUserModel.getCourse().getCourseId(),courseUserModel.getUserId());
+        courseUserModel = courseUserRespository.save(courseUserModel);
+        authUserClient.postSubscriptionUserInCourse(courseUserModel.getCourse().getCourseId(), courseUserModel.getUserId());
         return courseUserModel;
     }
 }

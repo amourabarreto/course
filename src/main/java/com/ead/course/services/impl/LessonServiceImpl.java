@@ -26,7 +26,7 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public Optional<LessonModel> findLessonIntoModulo(UUID moduleId, UUID lessonId) {
-        return lessonRepository.findLessonIntoModule(moduleId,lessonId);
+        return lessonRepository.findLessonIntoModule(moduleId, lessonId);
     }
 
     @Override
@@ -41,6 +41,6 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public Page<LessonModel> findAllLessonIntoModule(Specification<LessonModel> specification, Pageable pageable) {
-        return lessonRepository.findAll(specification,pageable);
+        return lessonRepository.findAll(specification, pageable);
     }
 }

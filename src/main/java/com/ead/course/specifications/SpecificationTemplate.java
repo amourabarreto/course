@@ -22,13 +22,16 @@ public class SpecificationTemplate {
             @Spec(path = "courseLevel", spec = Equal.class),
             @Spec(path = "name", spec = Like.class)
     })
-    public interface  CourseSpec extends Specification<CourseModel> {}
+    public interface CourseSpec extends Specification<CourseModel> {
+    }
 
     @Spec(path = "title", spec = Like.class)
-    public interface  ModuleSpec extends Specification<ModuleModel> {}
+    public interface ModuleSpec extends Specification<ModuleModel> {
+    }
 
     @Spec(path = "title", spec = Like.class)
-    public interface  LessonSpec extends Specification<LessonModel> {}
+    public interface LessonSpec extends Specification<LessonModel> {
+    }
 
     public static Specification<ModuleModel> moduleCourseId(final UUID courseId) {
         return (root, query, criteriaBuilder) -> {

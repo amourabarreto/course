@@ -23,7 +23,7 @@ import java.util.UUID;
 
 @Log4j2
 @RestController
-@CrossOrigin(origins = "*",maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/courses")
 public class CourseController {
 
@@ -35,49 +35,49 @@ public class CourseController {
     CourseValidator courseValidator;
 
     @PostMapping
-    public ResponseEntity<Object>  saveCourse(@RequestBody CourseDto courseDto, Errors errors){
-        log.debug("POST saveCourse CourseDTO RECEIVED {} ",courseDto.toString());
-        courseValidator.validate(courseDto,errors);
-        if(errors.hasErrors()){
+    public ResponseEntity<Object> saveCourse(@RequestBody CourseDto courseDto, Errors errors) {
+        log.debug("POST saveCourse CourseDTO RECEIVED {} ", courseDto.toString());
+        courseValidator.validate(courseDto, errors);
+        if (errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.getAllErrors());
         }
         var courseModel = new CourseModel();
-        BeanUtils.copyProperties(courseDto,courseModel);
+        BeanUtils.copyProperties(courseDto, courseModel);
         courseModel = courseService.save(courseModel);
-        log.debug("POST saveCourse CourseDTO SAVED {} ",courseModel.toString());
-        log.info("Course saved successfully courseId {} ",courseModel.getCourseId());
+        log.debug("POST saveCourse CourseDTO SAVED {} ", courseModel.toString());
+        log.info("Course saved successfully courseId {} ", courseModel.getCourseId());
         return ResponseEntity.status(HttpStatus.CREATED).body(courseModel);
     }
 
     @DeleteMapping("/{courseId}")
-    public ResponseEntity<Object> deleteCourse(@PathVariable(value = "courseId")UUID courseId){
+    public ResponseEntity<Object> deleteCourse(@PathVariable(value = "courseId") UUID courseId) {
         Optional<CourseModel> courseModelOptional = courseService.findById(courseId);
-        if(courseModelOptional.isEmpty()){
+        if (courseModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CURSO_NAO_ENCONTRADO);
         }
         courseService.delete(courseModelOptional.get());
-    return ResponseEntity.status(HttpStatus.OK).body("Curso deletado com sucesso!");
+        return ResponseEntity.status(HttpStatus.OK).body("Curso deletado com sucesso!");
     }
 
     @PutMapping("/{courseId}")
-    public ResponseEntity<Object> updateCourse(@PathVariable(value="courseId") UUID courseId,
-                                               @RequestBody @Valid CourseDto courseDto){
+    public ResponseEntity<Object> updateCourse(@PathVariable(value = "courseId") UUID courseId,
+                                               @RequestBody @Valid CourseDto courseDto) {
         Optional<CourseModel> courseModelOptional = courseService.findById(courseId);
-        if(courseModelOptional.isEmpty()){
+        if (courseModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CURSO_NAO_ENCONTRADO);
         }
         var courseModel = courseModelOptional.get();
 
-        BeanUtils.copyProperties(courseDto,courseModel,"courseID");
+        BeanUtils.copyProperties(courseDto, courseModel, "courseID");
 
         return ResponseEntity.status(HttpStatus.OK).body(courseService.save(courseModel));
     }
 
 
     @GetMapping("/{courseId}")
-    public ResponseEntity<Object> getOneCourse(@PathVariable(value="courseId") UUID courseId){
+    public ResponseEntity<Object> getOneCourse(@PathVariable(value = "courseId") UUID courseId) {
         var courseModel = courseService.findById(courseId);
-        if(courseModel.isEmpty()){
+        if (courseModel.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CURSO_NAO_ENCONTRADO);
         }
         return ResponseEntity.status(HttpStatus.OK).body(courseModel.get());
@@ -85,12 +85,12 @@ public class CourseController {
 
     @GetMapping
     public ResponseEntity<Page> getAllCourses(SpecificationTemplate.CourseSpec courseSpec,
-                                              @PageableDefault(page = 0, size=10,sort ="courseId", direction = Sort.Direction.ASC) Pageable pageable,
-                                              @RequestParam(required = false) UUID userId){
-       if(userId!=null){
-            return ResponseEntity.status(HttpStatus.OK).body(courseService.findAll(SpecificationTemplate.courseUserId(userId).and(courseSpec),pageable));
-        }else{
-            return ResponseEntity.status(HttpStatus.OK).body(courseService.findAll(courseSpec,pageable));
+                                              @PageableDefault(page = 0, size = 10, sort = "courseId", direction = Sort.Direction.ASC) Pageable pageable,
+                                              @RequestParam(required = false) UUID userId) {
+        if (userId != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(courseService.findAll(SpecificationTemplate.courseUserId(userId).and(courseSpec), pageable));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(courseService.findAll(courseSpec, pageable));
         }
 
     }

@@ -25,7 +25,7 @@ import java.util.UUID;
 
 @Log4j2
 @RestController
-@CrossOrigin(value = "*",maxAge = 3600)
+@CrossOrigin(value = "*", maxAge = 3600)
 public class CourseUserController {
 
     @Autowired
@@ -38,36 +38,36 @@ public class CourseUserController {
     CourseUserService courseUserService;
 
     @GetMapping("/courses/{courseId}/users")
-    public ResponseEntity<Page<UserDto>> getAllUsersByCourse(@PageableDefault(page=0,size=10, sort="userId",direction = Sort.Direction.ASC) Pageable pageable,
-                                                    @PathVariable(value = "courseId") UUID courseId){
-        return ResponseEntity.status(HttpStatus.OK).body(authUserClient.getAllUsersByCourse(courseId,pageable));
+    public ResponseEntity<Page<UserDto>> getAllUsersByCourse(@PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable,
+                                                             @PathVariable(value = "courseId") UUID courseId) {
+        return ResponseEntity.status(HttpStatus.OK).body(authUserClient.getAllUsersByCourse(courseId, pageable));
     }
 
     @PostMapping("/courses/{courseId}/users/subscription")
     public ResponseEntity<Object> saveSubscriptionUserInCourse(@PathVariable(value = "courseId") UUID courseId,
-                                                               @RequestBody @Valid SubscriptionDto subscriptionDto){
-        ResponseEntity<UserDto> responseUser=null;
+                                                               @RequestBody @Valid SubscriptionDto subscriptionDto) {
+        ResponseEntity<UserDto> responseUser = null;
         Optional<CourseModel> courseModelOptional = courseService.findById(courseId);
-        if(courseModelOptional.isEmpty()){
+        if (courseModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Curso não encontrado");
         }
-        if(courseUserService.existsByCourseAndUserId(courseModelOptional.get(),subscriptionDto.getUserId())){
+        if (courseUserService.existsByCourseAndUserId(courseModelOptional.get(), subscriptionDto.getUserId())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Usuário já cadastrado para o Curso!");
         }
 
         try {
             responseUser = authUserClient.getOneUserById(subscriptionDto.getUserId());
-            if(responseUser.getBody().getUserStatus().equals(UserStatus.BLOCKED)){
+            if (responseUser.getBody().getUserStatus().equals(UserStatus.BLOCKED)) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Usuário bloqueado!");
             }
         } catch (HttpStatusCodeException e) {
-                if(e.getStatusCode().equals(HttpStatus.NOT_FOUND)){
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado!");
-                }else{
-                    return ResponseEntity.status(e.getStatusCode()).body("ERRO!");
-                }
+            if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado!");
+            } else {
+                return ResponseEntity.status(e.getStatusCode()).body("ERRO!");
+            }
         }
-        CourseUserModel courseUserModel =  courseUserService.saveAndSendSubscriptionUserInCourse(courseModelOptional.get().convertToCourseUserModel(subscriptionDto.getUserId()));
-     return ResponseEntity.status(HttpStatus.CREATED).body("Inscrição criada com sucesso!");
+        CourseUserModel courseUserModel = courseUserService.saveAndSendSubscriptionUserInCourse(courseModelOptional.get().convertToCourseUserModel(subscriptionDto.getUserId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body("Inscrição criada com sucesso!");
     }
 }

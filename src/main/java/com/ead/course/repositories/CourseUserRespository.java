@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface CourseUserRespository extends JpaRepository<CourseUserModel, UUID> {
 
-    boolean existsByCourseAndUserId(CourseModel courseModel,UUID userId);
+    boolean existsByCourseAndUserId(CourseModel courseModel, UUID userId);
 
     @Query(value = "SELECT courseUserModel from CourseUserModel courseUserModel where courseUserModel.course.courseId = :courseId ")
     List<CourseUserModel> findAllCourseUserIntoCourse(UUID courseId);

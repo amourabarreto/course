@@ -9,9 +9,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update #alteracoes em objetos serao refletidos no banco de dados
-      dialect:  org.hibernate.dialect.PostgreSQLDialect
+      dialect: org.hibernate.dialect.PostgreSQLDialect
       jdbc:
-         lob.no-contextual-creation: true #bloqueia leitura de meta informacoes que podem gerar log de erro na inicializacao do hibernate
+        lob.no-contextual-creation: true #bloqueia leitura de meta informacoes que podem gerar log de erro na inicializacao do hibernate
     properties:
       hibernate:
         show_sql: true
@@ -24,7 +24,7 @@ logging:
     com.ead: TRACE
     root: INFO
     org.springframework.web: DEBUG
-    org.hibernate : INFO
+    org.hibernate: INFO
 
 ead:
   api:

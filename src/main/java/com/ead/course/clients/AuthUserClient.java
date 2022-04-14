@@ -36,12 +36,13 @@ public class AuthUserClient {
 
     public Page<UserDto> getAllUsersByCourse(UUID courseId, Pageable pageable) {
         List<UserDto> searchResult;
-        String url = utilsService.createUrl(courseId,pageable);
+        String url = utilsService.createUrl(courseId, pageable);
         log.debug(" Request URL: {}", url);
         log.info(" Request URL: {}", url);
         ResponseEntity<ResponsePageDto<UserDto>> result = null;
         try {
-            ParameterizedTypeReference<ResponsePageDto<UserDto>> responseType = new ParameterizedTypeReference<ResponsePageDto<UserDto>>() {};
+            ParameterizedTypeReference<ResponsePageDto<UserDto>> responseType = new ParameterizedTypeReference<ResponsePageDto<UserDto>>() {
+            };
             result = restTemplate.exchange(url, HttpMethod.GET, null, responseType);
             searchResult = result.getBody().getContent();
             log.debug(" Response Number of Elements: {}", searchResult.size());
@@ -54,7 +55,7 @@ public class AuthUserClient {
 
     public ResponseEntity<UserDto> getOneUserById(UUID userId) {
         List<UserDto> searchResult = null;
-        String url = RESQUEST_URI + "/users/"+ userId;
+        String url = RESQUEST_URI + "/users/" + userId;
         log.debug(" Request URL: {}", url);
         log.info(" Request URL: {}", url);
         ResponseEntity<ResponsePageDto<UserDto>> result = null;
@@ -62,8 +63,8 @@ public class AuthUserClient {
     }
 
     public void postSubscriptionUserInCourse(UUID courseId, UUID userId) {
-        String url = RESQUEST_URI + "/users/"+userId+"/courses/subscription";
-        var courseUserDto = new CourseUserDto(userId,courseId);
-        String retorno = restTemplate.postForObject(url,courseUserDto,String.class);
+        String url = RESQUEST_URI + "/users/" + userId + "/courses/subscription";
+        var courseUserDto = new CourseUserDto(userId, courseId);
+        String retorno = restTemplate.postForObject(url, courseUserDto, String.class);
     }
 }

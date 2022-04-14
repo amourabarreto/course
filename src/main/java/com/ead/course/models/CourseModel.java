@@ -20,7 +20,7 @@ import java.util.UUID;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name="TB_COURSES")
+@Table(name = "TB_COURSES")
 public class CourseModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,13 +38,13 @@ public class CourseModel implements Serializable {
     @Column
     private String imageUrl;
 
-    @Column(nullable = false,updatable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+    @Column(nullable = false, updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     @CreationTimestamp
     private LocalDateTime creationDate;
 
     @Column(nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     @UpdateTimestamp
     private LocalDateTime lastUpdateDate;
 
@@ -66,10 +66,10 @@ public class CourseModel implements Serializable {
     private Set<ModuleModel> modules;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToMany(mappedBy = "course",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
     private Set<CourseUserModel> coursesUsers;
 
-    public CourseUserModel convertToCourseUserModel(UUID userId){
-        return new CourseUserModel(null,userId,this);
+    public CourseUserModel convertToCourseUserModel(UUID userId) {
+        return new CourseUserModel(null, userId, this);
     }
 }

@@ -40,21 +40,21 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void delete(CourseModel courseModel) {
         List<ModuleModel> moduleModelList = moduleRepository.findAllModuleIntoCourse(courseModel.getCourseId());
-        if(!moduleModelList.isEmpty()){
+        if (!moduleModelList.isEmpty()) {
             moduleModelList.stream().forEach(module -> {
-                    List<LessonModel> lessonModelList = lessonRepository.findAllLessonsIntoModule(module.getModuleId());
-                    if(!lessonModelList.isEmpty()){
-                        lessonRepository.deleteAll(lessonModelList);
-                    }
-                });
-                moduleRepository.deleteAll(moduleModelList);
+                List<LessonModel> lessonModelList = lessonRepository.findAllLessonsIntoModule(module.getModuleId());
+                if (!lessonModelList.isEmpty()) {
+                    lessonRepository.deleteAll(lessonModelList);
+                }
+            });
+            moduleRepository.deleteAll(moduleModelList);
         }
         List<CourseUserModel> courseUserModels = courseUserRespository.findAllCourseUserIntoCourse(courseModel.getCourseId());
-        if(!courseUserModels.isEmpty()){
+        if (!courseUserModels.isEmpty()) {
             courseUserRespository.deleteAll(courseUserModels);
         }
         courseRepositoy.delete(courseModel);
-        }
+    }
 
 
     @Override
@@ -74,6 +74,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Page<CourseModel> findAll(Specification<CourseModel> courseSpec, Pageable pageable) {
-        return courseRepositoy.findAll(courseSpec,pageable);
+        return courseRepositoy.findAll(courseSpec, pageable);
     }
 }
