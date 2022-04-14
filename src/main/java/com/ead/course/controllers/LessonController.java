@@ -68,7 +68,7 @@ public class LessonController {
 
     @GetMapping("/modules/{moduleId}/lessons/{lessonId}")
     public ResponseEntity<Object> getOneLesson(@PathVariable(value = "moduleId" ) UUID moduleId,
-                                          @PathVariable(value = "lessonId") UUID lessonId){
+                                                @PathVariable(value = "lessonId") UUID lessonId){
         var lessonModelOptional = lessonService.findLessonIntoModulo(moduleId,lessonId);
         if(lessonModelOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(LICAO_NAO_LOCALIZADA_PARA_ESTE_MODULO);
@@ -77,9 +77,9 @@ public class LessonController {
     }
 
     @GetMapping("/modules/{moduleId}/lessons")
-    public ResponseEntity<Page<LessonModel>> getlAllLessons(@PathVariable(value = "moduleId" ) UUID moduleId,
+    public ResponseEntity<Page<LessonModel>> getAllLessons(@PathVariable(value = "moduleId" ) UUID moduleId,
                                                             SpecificationTemplate.LessonSpec spec,
-                                                            @PageableDefault(page = 0, sort = "lessonId",direction = Sort.Direction.ASC)
+                                                            @PageableDefault(page = 0, size=10, sort = "lessonId",direction = Sort.Direction.ASC)
                                                             Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(lessonService.findAllLessonIntoModule(SpecificationTemplate.lessonModuleId(moduleId).and(spec),pageable));
     }

@@ -1,9 +1,11 @@
 package com.ead.course.services.impl;
 
 import com.ead.course.models.CourseModel;
+import com.ead.course.models.CourseUserModel;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
 import com.ead.course.repositories.CourseRepositoy;
+import com.ead.course.repositories.CourseUserRespository;
 import com.ead.course.repositories.LessonRepository;
 import com.ead.course.repositories.ModuleRepository;
 import com.ead.course.services.CourseService;
@@ -31,6 +33,9 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     LessonRepository lessonRepository;
 
+    @Autowired
+    CourseUserRespository courseUserRespository;
+
     @Transactional
     @Override
     public void delete(CourseModel courseModel) {
@@ -42,8 +47,12 @@ public class CourseServiceImpl implements CourseService {
                         lessonRepository.deleteAll(lessonModelList);
                     }
                 });
-                moduleRepository.deleteAll(moduleModelList.stream().collect(Collectors.toList()));
-            }
+                moduleRepository.deleteAll(moduleModelList);
+        }
+        List<CourseUserModel> courseUserModels = courseUserRespository.findAllCourseUserIntoCourse(courseModel.getCourseId());
+        if(!courseUserModels.isEmpty()){
+            courseUserRespository.deleteAll(courseUserModels);
+        }
         courseRepositoy.delete(courseModel);
         }
 
