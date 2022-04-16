@@ -16,5 +16,5 @@ public interface LessonRepository extends JpaRepository<LessonModel, UUID>, JpaS
     List<LessonModel> findAllLessonsIntoModule(@Param(value = "moduleId") UUID moduleId);
 
     @Query(value = "SELECT lesson FROM LessonModel lesson WHERE lesson.lessonId= :lessonId AND lesson.module.moduleId= :moduleId")
-    Optional<LessonModel> findLessonIntoModule(UUID moduleId, UUID lessonId);
+    Optional<LessonModel> findLessonIntoModule(@Param(value = "moduleId") UUID moduleId, @Param(value = "lessonId") UUID lessonId);
 }
