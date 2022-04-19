@@ -12,20 +12,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "TB_COURSES_USERS")
-public class CourseUserModel implements Serializable {
+@Table(name = "TB_USERS")
+public class UserModel implements Serializable {
     private final static long serialVersionUID = 1L;
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public UUID id;
-
-    @Column(nullable = false)
-    private UUID userId;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private CourseModel course;
+    public UUID userId;
 
 
 }

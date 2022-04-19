@@ -1,16 +1,13 @@
 package com.ead.course.services.impl;
 
-import com.ead.course.clients.AuthUserClient;
 import com.ead.course.models.CourseModel;
-import com.ead.course.models.CourseUserModel;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
 import com.ead.course.repositories.CourseRepositoy;
-import com.ead.course.repositories.CourseUserRespository;
 import com.ead.course.repositories.LessonRepository;
 import com.ead.course.repositories.ModuleRepository;
+import com.ead.course.repositories.UserRespository;
 import com.ead.course.services.CourseService;
-import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +18,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -36,10 +32,7 @@ public class CourseServiceImpl implements CourseService {
     LessonRepository lessonRepository;
 
     @Autowired
-    CourseUserRespository courseUserRespository;
-
-    @Autowired
-    AuthUserClient authUserClient;
+    UserRespository courseUserRespository;
 
     @Transactional
     @Override
@@ -55,15 +48,8 @@ public class CourseServiceImpl implements CourseService {
             });
             moduleRepository.deleteAll(moduleModelList);
         }
-        List<CourseUserModel> courseUserModels = courseUserRespository.findAllCourseUserIntoCourse(courseModel.getCourseId());
-        if (!courseUserModels.isEmpty()) {
-            courseUserRespository.deleteAll(courseUserModels);
-            deleteCourseUserInAuthUser = true;
-        }
-        courseRepositoy.delete(courseModel);
-        if(deleteCourseUserInAuthUser){
-            authUserClient.deleteCourseIntoAuthUser(courseModel.getCourseId());
-        }
+       courseRepositoy.delete(courseModel);
+
     }
 
 
