@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 public class SpecificationTemplate {
+
     @And({
             @Spec(path = "courseStatus", spec = Equal.class),
             @Spec(path = "courseLevel", spec = Equal.class),
@@ -31,6 +32,15 @@ public class SpecificationTemplate {
 
     @Spec(path = "title", spec = Like.class)
     public interface LessonSpec extends Specification<LessonModel> {
+    }
+
+    @And({
+            @Spec(path = "email", spec = Like.class),
+            @Spec(path = "fullName", spec = Like.class),
+            @Spec(path = "userStatus", spec = Equal.class),
+            @Spec(path = "userType", spec = Equal.class),
+    })
+    public interface UserSpec extends Specification<UserModel> {
     }
 
     public static Specification<ModuleModel> moduleCourseId(final UUID courseId) {
@@ -50,6 +60,26 @@ public class SpecificationTemplate {
             Root<ModuleModel> model = query.from(ModuleModel.class);
             Expression<Collection<LessonModel>> moduleLessons = model.get("lessons");
             return criteriaBuilder.and(criteriaBuilder.equal(model.get("moduleId"), moduleId), criteriaBuilder.isMember(lesson, moduleLessons));
+        };
+    }
+
+    public static Specification<UserModel> userCourseId(final UUID courseId) {
+        return (root, query, criteriaBuilder) -> {
+            query.distinct(true);
+            Root<UserModel> user = root;
+            Root<CourseModel> course = query.from(CourseModel.class);
+            Expression<Collection<UserModel>> courseUsers = course.get("users");
+            return criteriaBuilder.and(criteriaBuilder.equal(course.get("courseId"), courseId), criteriaBuilder.isMember(user, courseUsers));
+        };
+    }
+
+    public static Specification<CourseModel> courseUserId(final UUID userId) {
+        return (root, query, criteriaBuilder) -> {
+            query.distinct(true);
+            Root<CourseModel> course = root;
+            Root<UserModel> user = query.from(UserModel.class);
+            Expression<Collection<CourseModel>> usersCourses = user.get("courses");
+            return criteriaBuilder.and(criteriaBuilder.equal(user.get("userId"), userId), criteriaBuilder.isMember(course, usersCourses));
         };
     }
 }
