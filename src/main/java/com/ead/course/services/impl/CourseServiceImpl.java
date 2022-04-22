@@ -72,4 +72,9 @@ public class CourseServiceImpl implements CourseService {
     public Page<CourseModel> findAll(Specification<CourseModel> courseSpec, Pageable pageable) {
         return courseRepositoy.findAll(courseSpec, pageable);
     }
+
+    @Override
+    public boolean existsByCourseAndUser() {
+        return false;
+    }
 }

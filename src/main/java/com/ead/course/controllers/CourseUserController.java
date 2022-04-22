@@ -29,7 +29,7 @@ public class CourseUserController {
     CourseService courseService;
 
     @Autowired
-    UserService courseUserService;
+    UserService userService;
 
     @GetMapping("/courses/{courseId}/users")
     public ResponseEntity<Object> getAllUsersByCourse(  SpecificationTemplate.UserSpec spec ,
@@ -39,7 +39,7 @@ public class CourseUserController {
         if (courseModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CURSO_NAO_ENCONTRADO);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(courseUserService.findAll(SpecificationTemplate.userCourseId(courseId).and(spec),pageable));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findAll(SpecificationTemplate.userCourseId(courseId).and(spec),pageable));
     }
 
     @PostMapping("/courses/{courseId}/users/subscription")
@@ -49,6 +49,10 @@ public class CourseUserController {
         if (courseModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CURSO_NAO_ENCONTRADO);
         }
+        if(courseService.existsByCourseAndUser()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("ERROR: Usuário já cadastrado para o curso!");
+        }
+        //Optional<User>
         // TODO: 18/04/2022 Fazer as verificaçoes utilizando state transfer
         return ResponseEntity.status(HttpStatus.CREATED).body("");
     }

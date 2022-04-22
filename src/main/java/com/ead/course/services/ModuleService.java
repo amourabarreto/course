@@ -11,8 +11,7 @@ import java.util.UUID;
 
 public interface ModuleService {
 
-    public void delete(ModuleModel moduleModel);
-
+    void delete(ModuleModel moduleModel);
 
     ModuleModel save(ModuleModel moduleModel);
 

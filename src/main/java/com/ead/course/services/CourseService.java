@@ -20,4 +20,6 @@ public interface CourseService {
     List<CourseModel> findAll();
 
     Page<CourseModel> findAll(Specification<CourseModel> courseSpec, Pageable pageable);
+
+    boolean existsByCourseAndUser();
 }
