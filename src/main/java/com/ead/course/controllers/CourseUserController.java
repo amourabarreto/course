@@ -1,7 +1,9 @@
 package com.ead.course.controllers;
 
 import com.ead.course.dtos.SubscriptionDto;
+import com.ead.course.enums.UserStatus;
 import com.ead.course.models.CourseModel;
+import com.ead.course.models.UserModel;
 import com.ead.course.services.CourseService;
 import com.ead.course.services.UserService;
 import com.ead.course.specifications.SpecificationTemplate;
@@ -49,12 +51,21 @@ public class CourseUserController {
         if (courseModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CURSO_NAO_ENCONTRADO);
         }
-        if(courseService.existsByCourseAndUser()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("ERROR: Usuário já cadastrado para o curso!");
+
+        Optional<UserModel> userModelOptional = userService.findById(subscriptionDto.getUserId());
+        if(userModelOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("ERROR: Usuário não existe!");
         }
-        //Optional<User>
-        // TODO: 18/04/2022 Fazer as verificaçoes utilizando state transfer
-        return ResponseEntity.status(HttpStatus.CREATED).body("");
+        if(userModelOptional.get().getUserStatus().equals(UserStatus.BLOCKED.toString())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("ERROR: Usuário bloquado!");
+        }
+
+        if(courseService.existsByCourseAndUser(courseId, userModelOptional.get().getUserId())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("ERROR: Usuário já inscrito no curso!");
+        }
+        courseService.saveSubscriptionInCourse(courseModelOptional.get().getCourseId(),userModelOptional.get().getUserId());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Inscrição efetuada com sucesso!");
     }
 
 }

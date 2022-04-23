@@ -1,5 +1,6 @@
 package com.ead.course.services.impl;
 
+import com.ead.course.controllers.CourseUserController;
 import com.ead.course.models.CourseModel;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
@@ -31,8 +32,6 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     LessonRepository lessonRepository;
 
-    @Autowired
-    UserRespository courseUserRespository;
 
     @Transactional
     @Override
@@ -74,7 +73,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public boolean existsByCourseAndUser() {
-        return false;
+    public boolean existsByCourseAndUser(UUID courseId, UUID userId) {
+        return courseRepositoy.existsByCourseAndUser(courseId,userId);
+    }
+    @Transactional
+    @Override
+    public void saveSubscriptionInCourse(UUID courseId, UUID userId) {
+        courseRepositoy.saveCourseUser(courseId,userId);
     }
 }
