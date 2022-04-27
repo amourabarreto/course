@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,8 +27,10 @@ public class UserServiceImpl implements UserService {
         return userRespository.save(userModel);
     }
 
+    @Transactional
     @Override
     public void delete(UUID userId) {
+        userRespository.deleteCoursesUsersByUserId(userId);
         userRespository.deleteById(userId);
     }
 
