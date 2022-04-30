@@ -63,7 +63,7 @@ public class CourseUserController {
         if(courseService.existsByCourseAndUser(courseId, userModelOptional.get().getUserId())){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("ERROR: Usuário já inscrito no curso!");
         }
-        courseService.saveSubscriptionInCourse(courseModelOptional.get().getCourseId(),userModelOptional.get().getUserId());
+        courseService.saveSubscriptionInCourseAndSendNotification(courseModelOptional.get(),userModelOptional.get());
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Inscrição efetuada com sucesso!");
     }
