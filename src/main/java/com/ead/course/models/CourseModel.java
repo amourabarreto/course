@@ -71,4 +71,5 @@ public class CourseModel implements Serializable {
                inverseJoinColumns = @JoinColumn(name = "userId"))
     private Set<UserModel> users;
 
+
 }
