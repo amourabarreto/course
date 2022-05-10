@@ -1,0 +1,22 @@
+server:
+  port: 8082
+  servlet:
+    context-path: '/ead-course/'
+
+spring:
+  config:
+    import: 'optional:configserver:'
+  cloud:
+    config:
+      discovery:
+        service-id: ead-config-server
+      username: admin
+      password: admin
+
+
+
+
+
+
+
+
